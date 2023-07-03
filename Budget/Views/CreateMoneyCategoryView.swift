@@ -1,5 +1,5 @@
 //
-//  CreateSpendingCategoryView.swift
+//  CreateMoneyCategoryView.swift
 //  Budget
 //
 //  Created by Ethan Pippin on 6/28/23.
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct CreateSpendingCategoryView: View {
+struct CreateMoneyCategoryView: View {
     
     @Environment(\.dismiss)
     private var dismiss
@@ -16,11 +16,13 @@ struct CreateSpendingCategoryView: View {
     private var modelContext
     
     @State
+    private var color: Color = .blue
+    @State
     private var title: String = ""
     
     private func createSpendingCategory() {
         withAnimation {
-            let newSpendingCategory = MoneyCategory(title: title, type: .spending)
+            let newSpendingCategory = MoneyCategory(title: title, color: color)
             modelContext.insert(newSpendingCategory)
         }
     }
@@ -30,20 +32,25 @@ struct CreateSpendingCategoryView: View {
             Form {
                 Section("Title") {
                     TextField("Title", text: $title, prompt: Text("Wants, Needs"))
+                    
+                    ColorPicker("Color", selection: $color, supportsOpacity: false)
                 }
                 
                 Section {
-                    Button(action: {
+                    Button {
                         createSpendingCategory()
                         dismiss()
-                    }, label: {
+                    } label: {
                         Text("Create")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(title.isEmpty ? Color.black : .white)
                             .fontWeight(.bold)
-                    })
-                    .listRowBackground(Color.blue)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .disabled(title.isEmpty)
+                    .listRowBackground(title.isEmpty ? Color.secondary : .blue)
                 }
             }
+            .closeTopBarButton()
             .navigationTitle("Create")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -53,6 +60,6 @@ struct CreateSpendingCategoryView: View {
 #Preview {
     Text("")
         .sheet(isPresented: .constant(true), content: {
-            CreateSpendingCategoryView()
+            CreateMoneyCategoryView()
         })
 }

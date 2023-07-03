@@ -6,43 +6,26 @@
 //
 
 import SwiftData
+import SwiftUI
 
 @Model
 final class MoneyCategory {
     
-    struct MoneyType: CaseIterable, Codable {
-        
-        let title: String
-        
-        private init(title: String) {
-            self.title = title
-        }
-        
-        static let income: MoneyType = MoneyType(title: "Income")
-        static let spending: MoneyType = MoneyType(title: "Spending")
-        
-        static var allCases: [MoneyCategory.MoneyType] = [income, spending]
-    }
-    
     @Attribute(.unique)
     var title: String
     
-    var type: MoneyType
+    var color: CodableColor
     
-    @Relationship(.cascade)
-    var transactions: [SpendingTransaction]
+    @Relationship(.cascade, inverse: \MoneyItem.category)
+    var items: [MoneyItem]
     
-    var transactionsAmount: Double {
-        transactions.map(\.amount).reduce(0, +)
+    var monthlyTotal: Double {
+        items.map(\.amount).reduce(0, +)
     }
     
-    init(title: String, type: MoneyType) {
+    init(title: String, color: Color) {
         self.title = title
-        self.type = type
-        self.transactions = []
-    }
-    
-    func addTransaction(title: String, amount: Double) {
-        
+        self.color = UIColor(color).codableColor
+        self.items = []
     }
 }
