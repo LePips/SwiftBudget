@@ -1,23 +1,16 @@
-//
-//  SettingsView.swift
-//  Budget
-//
-//  Created by Ethan Pippin on 6/28/23.
-//
-
 import SwiftUI
 
 struct SettingsView: View {
-    
+
     @AppStorage("monthlyBudget")
     private var monthlyBudget: Double = 0
-    
+
     @Environment(\.dismiss)
     private var dismiss
-    
+
     @State
     private var currencyFormatter: NumberFormatter = .currencyFormatter
-    
+
     var body: some View {
         NavigationStack {
             Form {

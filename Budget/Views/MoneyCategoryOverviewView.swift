@@ -1,47 +1,40 @@
-//
-//  MoneyCategoryOverviewView.swift
-//  Budget
-//
-//  Created by Ethan Pippin on 6/28/23.
-//
-
 import SwiftData
 import SwiftUI
 
 struct MoneyCategoryOverviewView: View {
-    
+
     enum ItemSectionType {
         case combined
         case split
     }
-    
+
     @AppStorage("monthlyBudget")
     private var monthlyBudget: Double = 0
-    
+
     @Environment(\.modelContext)
     private var modelContext
-    
+
     @State
     private var isPresentingCreateMoneyItem: Bool = false
     @State
     private var itemSectionType: ItemSectionType = .split
-    
+
     let moneyCategory: MoneyCategory
-    
+
     private func delete(moneyItem: MoneyItem) {
         modelContext.delete(moneyItem)
     }
-    
+
     @ViewBuilder
     private var summarySection: some View {
         Section("Summary") {
-            
+
             SplitText {
                 Text("Total")
             } trailing: {
                 Text(moneyCategory.monthlyTotal, format: .currency(code: "USD"))
             }
-            
+
             SplitText {
                 Text("Percentage")
             } trailing: {
@@ -54,7 +47,7 @@ struct MoneyCategoryOverviewView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private var itemsSection: some View {
         Section("Items") {
@@ -65,10 +58,10 @@ struct MoneyCategoryOverviewView: View {
                 ForEach(moneyCategory.items.sorted(using: \.title)) { moneyItem in
                     SplitText {
                         VStack(alignment: .leading) {
-                            
+
                             Text(moneyItem.title)
                                 .lineLimit(1)
-                            
+
                             Text(moneyItem.frequency.rawValue)
                                 .foregroundStyle(.secondary)
                                 .font(.caption)
@@ -88,13 +81,13 @@ struct MoneyCategoryOverviewView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private var monthlyYearlySections: some View {
-        
-        let monthlyItems = moneyCategory.items.filter({ $0.frequency == .monthly })
-        let yearlyItems = moneyCategory.items.filter({ $0.frequency == .yearly })
-        
+
+        let monthlyItems = moneyCategory.items.filter { $0.frequency == .monthly }
+        let yearlyItems = moneyCategory.items.filter { $0.frequency == .yearly }
+
         Section("Monthly") {
             if monthlyItems.isEmpty {
                 Text("No Items")
@@ -117,7 +110,7 @@ struct MoneyCategoryOverviewView: View {
                 }
             }
         }
-        
+
         Section("Yearly") {
             if yearlyItems.isEmpty {
                 Text("No Items")
@@ -141,12 +134,12 @@ struct MoneyCategoryOverviewView: View {
             }
         }
     }
-    
+
     var body: some View {
         List {
-            
+
             summarySection
-            
+
             Button {
                 isPresentingCreateMoneyItem = true
             } label: {
@@ -156,7 +149,7 @@ struct MoneyCategoryOverviewView: View {
                     .frame(maxWidth: .infinity)
             }
             .listRowBackground(Color.blue)
-            
+
             switch itemSectionType {
             case .combined:
                 itemsSection
@@ -182,7 +175,7 @@ struct MoneyCategoryOverviewView: View {
                             Text("Combined")
                         }
                     }
-                    
+
                     Button {
                         itemSectionType = .split
                     } label: {

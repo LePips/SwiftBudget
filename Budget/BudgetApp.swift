@@ -1,10 +1,3 @@
-//
-//  BudgetApp.swift
-//  Budget
-//
-//  Created by Ethan Pippin on 6/26/23.
-//
-
 import SwiftUI
 
 @main
@@ -13,9 +6,8 @@ struct BudgetApp: App {
         WindowGroup {
             HomeView()
         }
-        .modelContainer(ContentViewPreviewSampleData.container)
-//        .modelContainer(for: [
-//            SpendingCategory.self
-//        ])
+        .modelContainer(for: [
+            MoneyCategory.self,
+        ])
     }
 }

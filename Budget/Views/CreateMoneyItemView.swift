@@ -1,20 +1,13 @@
-//
-//  CreateMoneyItemView.swift
-//  Budget
-//
-//  Created by Ethan Pippin on 6/28/23.
-//
-
 import SwiftData
 import SwiftUI
 
 struct CreateMoneyItemView: View {
-    
+
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
     private var modelContext
-    
+
     @State
     private var amount: Double = 0
     @State
@@ -25,9 +18,9 @@ struct CreateMoneyItemView: View {
     private var notes: String = ""
     @State
     private var title: String = ""
-    
+
     let moneyCategory: MoneyCategory
-    
+
     private func createMoneyItem() {
         withAnimation {
             let _notes: String? = notes.isEmpty ? nil : notes
@@ -35,21 +28,21 @@ struct CreateMoneyItemView: View {
             moneyCategory.items.append(newMoneyItem)
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             Form {
-                
+
                 Section {
-                    
+
                     TextField("Title", text: $title, prompt: Text("Title"))
                     TextField("Notes", text: $notes, axis: .vertical)
                 }
-                
+
                 Section {
                     TextField("Amount", value: $amount, formatter: currencyFormatter)
                         .keyboardType(.decimalPad)
-                    
+
                     Picker(selection: $frequency) {
                         ForEach(MoneyItem.Frequency.allCases, id: \.rawValue) { frequency in
                             Text(frequency.rawValue)
@@ -59,7 +52,7 @@ struct CreateMoneyItemView: View {
                         Text("Frequency")
                     }
                 }
-                
+
                 Section {
                     Button {
                         createMoneyItem()

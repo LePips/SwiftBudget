@@ -1,41 +1,34 @@
-//
-//  CreateMoneyCategoryView.swift
-//  Budget
-//
-//  Created by Ethan Pippin on 6/28/23.
-//
-
 import SwiftData
 import SwiftUI
 
 struct CreateMoneyCategoryView: View {
-    
+
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
     private var modelContext
-    
+
     @State
     private var color: Color = .blue
     @State
     private var title: String = ""
-    
+
     private func createSpendingCategory() {
         withAnimation {
             let newSpendingCategory = MoneyCategory(title: title, color: color)
             modelContext.insert(newSpendingCategory)
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             Form {
                 Section("Title") {
                     TextField("Title", text: $title, prompt: Text("Wants, Needs"))
-                    
+
                     ColorPicker("Color", selection: $color, supportsOpacity: false)
                 }
-                
+
                 Section {
                     Button {
                         createSpendingCategory()
